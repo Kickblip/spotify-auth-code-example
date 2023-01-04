@@ -1,23 +1,23 @@
-var express = require('express');
-var querystring = require('querystring');
-var cors = require('cors');
-var cookieParser = require('cookie-parser');
+const express = require('express');
+const querystring = require('querystring');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
-const client_id = 'YOUR_CLIENT_ID';
-const client_secret = 'YOUR_CLIENT_SECRET';
-const redirect_uri = 'YOUR_REDIRECT_URI';
+const client_id = '33483fbdd3704a4ea4e8c74313eb17d4';
+const client_secret = '8921ad35b1a84e5cb08c119f05f77afd';
+const redirect_uri = 'http://localhost:8888/callback';
 
-var generateRandomString = function (length) {
-    var text = '';
-    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const generateRandomString = function (length) {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-    for (var i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
 };
 
-let stateKey = 'spotify_auth_state'; // sets name of the cookie
+let stateKey = 'spotify_auth_state'; // name of the cookie
 
 let app = express();
 
@@ -27,11 +27,11 @@ app.use(express.static(__dirname + '/public'))
 
 app.get('/login', function (req, res) {
 
-    var state = generateRandomString(16); // sets value of the cookie
-    res.cookie(stateKey, state); // sets cookie
+    let state = generateRandomString(16);
+    res.cookie(stateKey, state); // set cookie to travel with request
 
-    // your application requests authorization
-    var scope = 'user-read-private user-read-email';
+    // request authorization - automatically redirects to callback
+    const scope = 'user-read-private user-read-email';
     res.redirect('https://accounts.spotify.com/authorize?' +
         querystring.stringify({
             response_type: 'code',
@@ -44,12 +44,11 @@ app.get('/login', function (req, res) {
 
 app.get('/callback', function (req, res) {
 
-    // your application requests refresh and access tokens
-    // after checking the state parameter
+    // request refresh and access tokens after comparing states
 
-    var code = req.query.code || null;
-    var state = req.query.state || null;
-    var storedState = req.cookies ? req.cookies[stateKey] : null;
+    let code = req.query.code || null;
+    let state = req.query.state || null;
+    let storedState = req.cookies ? req.cookies[stateKey] : null;
 
     if (state === null || state !== storedState) {
         res.redirect('/#' +
@@ -95,7 +94,9 @@ app.get('/callback', function (req, res) {
 });
 
 app.get('/refresh_token', function (req, res) {
+
     // requesting access token from refresh token
+
     const refresh_token = req.query.refresh_token;
     const authOptions = {
         method: 'POST',
