@@ -3,9 +3,9 @@ const querystring = require('querystring');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-const client_id = '33483fbdd3704a4ea4e8c74313eb17d4';
-const client_secret = '8921ad35b1a84e5cb08c119f05f77afd';
-const redirect_uri = 'http://localhost:8888/callback';
+const client_id = 'YOUR_CLIENT_ID';
+const client_secret = 'YOUR_SECRET_ID';
+const redirect_uri = 'YOUR_REDIRECT_URI';
 
 const generateRandomString = function (length) {
     let text = '';
