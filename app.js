@@ -4,10 +4,10 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
 const client_id = 'YOUR_CLIENT_ID';
-const client_secret = 'YOUR_SECRET_ID';
+const client_secret = 'YOUR_SECRET_ID'; // important to protect this one
 const redirect_uri = 'YOUR_REDIRECT_URI';
 
-const generateRandomString = function (length) {
+const generateRandomString = function (length) { // generate random string to use as a state
     let text = '';
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -25,7 +25,7 @@ app.use(express.static(__dirname + '/public'))
     .use(cors())
     .use(cookieParser());
 
-app.get('/login', function (req, res) {
+app.get('/login', function (req, res) { // handle login request from the hyperlink on html page
 
     let state = generateRandomString(16);
     res.cookie(stateKey, state); // set cookie to travel with request
@@ -56,7 +56,7 @@ app.get('/callback', function (req, res) {
                 error: 'state_mismatch'
             }));
     } else {
-        res.clearCookie(stateKey);
+        res.clearCookie(stateKey); // eat (clear) cookie
 
         const authOptions = {
             method: 'POST',
@@ -68,7 +68,7 @@ app.get('/callback', function (req, res) {
             json: true
         };
 
-        fetch('https://accounts.spotify.com/api/token', authOptions)
+        fetch('https://accounts.spotify.com/api/token', authOptions) // make request to token endpoint for our tokens
             .then((response) => {
                 if (response.status === 200) {
                     response.json().then((data) => {
@@ -95,7 +95,11 @@ app.get('/callback', function (req, res) {
 
 app.get('/refresh_token', function (req, res) {
 
-    // requesting access token from refresh token
+    /*
+    I included an example refresh token request since it's useful to have, but this should obviously be implemented
+    in a different way than just having the user press a button on the screen - access tokens expire after 
+    2 hours (I believe) so you'll need to manage refreshes based on that
+    */
 
     const refresh_token = req.query.refresh_token;
     const authOptions = {
