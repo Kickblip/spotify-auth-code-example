@@ -1,4 +1,4 @@
-# My Spotify API Authorization Flow
+# My Spotify API Authorization Code Flow
 using fetch instead of depreciated request library and stripping out unneccesary code from official example
 
 use the commands ```npm install``` then ```node app.js``` to run
