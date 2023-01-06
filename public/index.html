@@ -22,7 +22,7 @@
 
         function getHashParams() {
             let hashParams = {};
-            let e, r = /([^&;=]+)=?([^&;]*)/g,
+            let e, r = /([^&;=]+)=?([^&;]*)/g, // really weird looking way to include all characters
                 q = window.location.hash.substring(1);
             while (e = r.exec(q)) {
                 hashParams[e[1]] = decodeURIComponent(e[2]);
@@ -40,8 +40,8 @@
             alert('There was an error during the authentication');
         } else {
             if (access_token) {
-                $('#login').hide();
-                $('#logged-in').show();
+                $('#login').hide(); // change to login screen by hiding matching divs
+                $('#logged-in').show(); // but only if the login was successful
             } else {
                 $('#login').show();
                 $('#logged-in').hide();
@@ -50,7 +50,7 @@
 
         document.getElementById('refresh-token').addEventListener('click', function () {
             $.ajax({
-                url: '/refresh_token',
+                url: '/refresh_token', // there are better ways to implement a refresh than this - but this is how you'd do it
                 data: {
                     'refresh_token': refresh_token
                 }
